@@ -44,12 +44,13 @@
  * Extract all values into an array using loops
  */
 const scores = {
-    math: 85,
-    english: 92,
-    science: 78,
-    history: 88
+  math: 85,
+  english: 92,
+  science: 78,
+  history: 88,
 };
-let output = []
+let output = [];
 for (let key in scores) {
-    output.push(key)
+  output.push(scores[key]);
 }
+console.log(output);

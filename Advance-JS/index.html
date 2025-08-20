@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basic Toast</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+    <!-- Button -->
+    <button onclick="showToast()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+        Show Toast
+    </button>
+
+    <!-- Toast Box -->
+    <div id="toast" class="hidden fixed bottom-5 right-5 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg">
+        This is a toast message!
+    </div>
+    <script src="./toaster.js"></script>
+</body>
+
+</html>
