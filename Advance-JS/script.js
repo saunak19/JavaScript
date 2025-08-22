@@ -43,10 +43,10 @@ let fnc = countForMe();
 fnc();
 fnc();
 fnc();
-let fnc2 = countForMe();
-fnc2();
-fnc2();
-fnc2();
+countForMe();
+countForMe();
+countForMe();
+countForMe();
 
 // function clickLimiter() {
 //   let click = 0;

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional User Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#64748b',
+                        dark: '#1e293b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+        }
+
+        .table-row:hover {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="py-8 px-4">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-bold text-dark mb-3">User Information System</h1>
+            <p class="text-secondary text-lg">Add user details and manage records</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Form Section -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden card">
+                <div class="bg-primary text-white py-4 px-6">
+                    <h2 class="text-xl font-bold"><i class="fas fa-user-plus mr-2"></i>User Registration Form</h2>
+                </div>
+                <form id="userForm" class="p-6 space-y-5" onsubmit="userForm()">
+                    <div class="showAllFieldError">
+
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-secondary mb-1 userLabel" for="fullName">Full
+                            Name</label>
+                        <div class="relative">
+                            <input type="text"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="Enter your name" value="">
+                            <i class="fas fa-user absolute right-3 top-3.5 text-secondary"></i>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-secondary mb-1 userLabel" for="email">Email
+                            Address</label>
+                        <div class="relative">
+                            <input type="email"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="Enter your email" value="">
+                            <i class="fas fa-envelope absolute right-3 top-3.5 text-secondary"></i>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-secondary mb-1 userLabel" for="phone">Phone
+                            Number</label>
+                        <div class="relative">
+                            <input type="tel"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="Enter your phone number" value="">
+                            <i class="fas fa-phone absolute right-3 top-3.5 text-secondary"></i>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-secondary mb-1 userLabel">Age</label>
+                        <div class="relative">
+                            <input type="number" id="age"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="Enter your age" value="">
+                            <i class="fas fa-birthday-cake absolute right-3 top-3.5 text-secondary"></i>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-secondary mb-1 userLabel"
+                            for="gender">Gender</label>
+                        <div class="grid grid-cols-2 gap-3 mt-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="gender" value="male"
+                                    class="h-4 w-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-secondary">Male</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="gender" value="female"
+                                    class="h-4 w-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-secondary">Female</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="gender" value="other"
+                                    class="h-4 w-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-secondary">Other</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="gender" value="prefer-not-to-say"
+                                    class="h-4 w-4 text-primary focus:ring-primary" value="">
+                                <span class="ml-2 text-secondary">Prefer not to say</span>
+                            </label>
+                            <div id="genderError"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-secondary mb-1 userLabel"
+                            for="hobbies">Hobbies</label>
+                        <div class="grid grid-cols-2 gap-3 mt-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" value="reading" class="h-4 w-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-secondary">Reading</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" value="sports" class="h-4 w-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-secondary">Sports</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" value="music" class="h-4 w-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-secondary">Music</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" value="travel" class="h-4 w-4 text-primary focus:ring-primary">
+                                <span class="ml-2 text-secondary">Travel</span>
+                            </label>
+                            <div id="hobbies"></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button type="submit"
+                            class="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                            <i class="fas fa-paper-plane mr-2"></i>Submit Form
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Table Section -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden card">
+                <div class="bg-primary text-white py-4 px-6">
+                    <h2 class="text-xl font-bold"><i class="fas fa-table mr-2"></i>User Records</h2>
+                </div>
+                <div class="p-4 overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-gray-100 text-left text-secondary uppercase text-sm font-medium">
+                                <th class="p-3">Name</th>
+                                <th class="p-3">Email</th>
+                                <th class="p-3">Phone</th>
+                                <th class="p-3">Age</th>
+                                <th class="p-3">Gender</th>
+                                <th class="p-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <!-- <tr class="table-row border-b border-gray-200 hover:bg-gray-50">
+                                <td class="p-3">John Doe</td>
+                                <td class="p-3">john@example.com</td>
+                                <td class="p-3">(555) 123-4567</td>
+                                <td class="p-3">28</td>
+                                <td class="p-3">Male</td>
+                                <td class="p-3">
+                                    <button class="text-blue-500 hover:text-blue-700 mr-2" title="Edit user">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="text-red-500 hover:text-red-700" title="Delete user">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- <div class="bg-gray-100 py-3 px-6 text-secondary text-sm flex justify-between items-center">
+                    <p>Showing 4 out of 24 records</p>
+                    <div>
+                        <button class="bg-primary text-white px-4 py-1 rounded mr-2" title="Previous page">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="bg-primary text-white px-4 py-1 rounded" title="Next page">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form validation and submission handling
+        document.getElementById('userForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            // alert('Form submitted successfully!');
+            this.reset();
+        });
+    </script>
+    <script src="./script.js"></script>
+</body>
+
+</html>
