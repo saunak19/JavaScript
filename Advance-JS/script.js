@@ -31,6 +31,8 @@
 //   };
 // }
 // abc();
+import { testExportFnc } from "./module.js";
+testExportFnc();
 
 function countForMe() {
   let count = 0;
@@ -42,28 +44,3 @@ function countForMe() {
 let fnc = countForMe();
 fnc();
 fnc();
-fnc();
-countForMe();
-countForMe();
-countForMe();
-countForMe();
-
-// function clickLimiter() {
-//   let click = 0;
-//   return function () {
-//     if (click < 5) {
-//       click++;
-//       console.log(`click : ${click} times`);
-//     } else {
-//       console.error("LIMIT EXCEEDED, TRY AFTER SOME TIME");
-//     }
-//   };
-// }
-
-// let fnc = clickLimiter();
-// fnc();
-// fnc();
-// fnc();
-// fnc();
-// fnc();
-// fnc();
