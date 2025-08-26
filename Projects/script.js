@@ -49,7 +49,6 @@ function validatePassword(password) {
   }
   return true;
 }
-
 function checkEmail(email) {
   for (let i = 0; i < getUser.length; i++) {
     if (getUser[i][1] === email) {
@@ -173,7 +172,6 @@ function userForm(event) {
   }
   renderUsers();
 }
-
 function showError(inputElement, message) {
   let error = document.createElement("p");
   error.className = "error-msg text-red-500 text-sm mt-1";
@@ -185,8 +183,6 @@ function showError(inputElement, message) {
     inputElement.parentElement.appendChild(error);
   }
 }
-// let getUser = JSON.parse(localStorage.getItem("users"));
-// console.log(getUser[0]);
 
 function renderUsers() {
   const tbody = document.getElementById("userTableBody");
@@ -236,41 +232,6 @@ function deleteUser(index) {
   }
 }
 
-// function loginUser() {
-//   let loginForm = document.getElementById("loginForm");
-//   let userEmail = document.getElementById("loginEmail");
-//   let password = document.getElementById("loginPassword");
-//   let users = JSON.parse(localStorage.getItem("users")) || [];
-
-//   function checkEmailAndPass(email, password) {
-//     for (let i = 0; i < users.length; i++) {
-//       console.log(users[i][1] === email);
-//       console.log(users[i]);
-//       if (users[i][1] === email) {
-//         if (users[i][2] === password) {
-//           return true;
-//         } else {
-//           return false;
-//         }
-//         return true;
-//       } else {
-//         return false;
-//       }
-//     }
-//   }
-//   if (checkEmailAndPass(userEmail.value, password.value) === true) {
-//     toaster("Login successful. Redirecting...", true);
-//     setTimeout(() => {
-//       window.location.href = "/Projects/dashboard.html";
-//     }, 2000);
-//     localStorage.setItem("isLoggedIn", true);
-//   } else {
-//     toaster("Please Enter valid Email and Password", false);
-//   }
-
-//   loginForm.reset();
-// }
-
 function loginUser() {
   let loginForm = document.getElementById("loginForm");
   let userEmail = document.getElementById("loginEmail").value.trim();
@@ -296,7 +257,7 @@ function loginUser() {
     minutes = minutes == 58 ? 3 : minutes == 59 ? 2 : minutes + 2;
     let isLogin = {
       status: true,
-      time: minutes + 10,
+      time: minutes,
     };
     toaster("Login successful. Redirecting...", true);
     localStorage.setItem("isLoggedIn", JSON.stringify(isLogin));
@@ -317,11 +278,9 @@ function openUpdateModal(index) {
   document.getElementById("updateEmail").value = users[index][1] || "";
   document.getElementById("updatePhone").value = users[index][3] || "";
   document.getElementById("updateAge").value = users[index][4] || "";
-
   document.querySelectorAll('input[name="updateGender"]').forEach((radio) => {
     radio.checked = radio.value === users[index][5];
   });
-
   document.querySelectorAll(".updateHobby").forEach((checkbox) => {
     checkbox.checked = users[index][6].includes(checkbox.value);
   });
@@ -356,7 +315,7 @@ document.getElementById("submitUpdate").addEventListener("click", function () {
     const updatedUser = [
       nameInput.value,
       emailInput.value,
-      ,
+      getUser[index][2],
       phoneInput.value,
       ageInput.value,
       genderInput?.value || "",
@@ -374,7 +333,7 @@ document.getElementById("submitUpdate").addEventListener("click", function () {
         renderUsers();
       }
 
-      alert("User updated successfully!");
+      toaster("User updated successfully!", true);
       closeUpdateModal();
     }
   }
@@ -394,4 +353,3 @@ function validationForm(...inputElements) {
 
   return isValid;
 }
-console.log(validationForm());

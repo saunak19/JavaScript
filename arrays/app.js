@@ -36,3 +36,5 @@ async function verifyPassword(inputPassword) {
   const inputHash = await hashSHA256(inputPassword);
   return storedHash === inputHash;
 }
+
+document.getElementById("submitUpdate").addEventListener("click");

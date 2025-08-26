@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #updateUser {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="userForm">
+        <input type="text" id="name" name="name" placeholder="Name" />
+        <input type="email" id="email" name="email" placeholder="Email" />
+        <input type="password" id="password" name="password" placeholder="Password" />
+        <input type="text" id="phone" name="phone" placeholder="Phone" />
+        <input type="number" id="age" name="age" placeholder="Age" />
+        <input type="text" id="gender" name="gender" placeholder="Gender" />
+        <input type="text" id="hobbies" name="hobbies" placeholder="Hobbies" />
+        <button type="submit" id="submitUser">Submit</button>
+        <button type="submit" id="updateUser">Update</button>
+    </form>
+
+    <button id="loadUsers" type="submit">User Get</button>
+    <table border="1" id="usersTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Phone</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Hobbies</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script>
+        // Open DB
+        let db;
+        let openRequest = indexedDB.open("myDB", 1);
+
+
+
+        openRequest.onupgradeneeded = (e) => {
+            let db = e.target.result;
+            if (!db.objectStoreNames.contains("users")) {
+                db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+            }
+        };
+        openRequest.onsuccess = (e) => {
+            console.log("DB opened successfully");
+            db = e.target.result;
+        };
+        openRequest.onerror = (e) => {
+            console.error("DB error:", e.target.error);
+        };
+        document.getElementById("userForm").addEventListener("submit", (e) => {
+            e.preventDefault(); // prevent reload
+            let form = document.getElementById("userForm")
+            let db = openRequest.result;
+
+            let transaction = db.transaction("users", "readwrite");
+            let storeObject = transaction.objectStore("users");
+
+            let data = {
+                name: e.target.name.value,
+                email: e.target.email.value,
+                password: e.target.password.value,
+                phone: e.target.phone.value,
+                age: e.target.age.value,
+                gender: e.target.gender.value,
+                hobbies: e.target.hobbies.value,
+            };
+
+            let request = storeObject.put(data);
+
+            request.onsuccess = () => {
+                console.log("Data stored successfully:", request.result);
+                form.reset()
+            };
+
+            request.onerror = () => {
+                console.error("Error storing data:", request.error);
+            };
+        });
+
+        document.getElementById("loadUsers").addEventListener("click", () => {
+            console.log("Button clicked");
+
+            if (!db) {
+                console.error("DB not initialized yet");
+                return;
+            }
+
+            let transaction = db.transaction("users", "readonly");
+            let storeObject = transaction.objectStore("users");
+            let request = storeObject.getAll();
+
+            request.onsuccess = (e) => {
+                let users = e.target.result;
+                let tbody = document.querySelector("#usersTable tbody");
+
+                tbody.innerHTML = "";
+                users.forEach(user => {
+                    let row = `
+          <tr>
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>${user.password}</td>
+            <td>${user.phone}</td>
+            <td>${user.age}</td>
+            <td>${user.gender}</td>
+            <td>${user.hobbies}</td>
+            <td><button id='delete' onclick="deleteUser(${user.id})">delete</button>
+                <button id='delete' onclick="editUser(${user.id})">edit</button></td>
+          </tr>`;
+                    tbody.innerHTML += row;
+                });
+            };
+
+
+            request.onerror = (e) => {
+                console.error("Error fetching users:", e.target.error);
+            };
+        });
+        function deleteUser(id) {
+            // let confirm = confirm(`Are you sure delete ${id} this id ?`)
+            if (confirm(`Are you sure delete ${id} this id ?`)) {
+                if (!db) {
+                    console.log("DB not initialized yet");
+                    return
+                }
+                let transaction = db.transaction("users", "readwrite");
+                let storeObject = transaction.objectStore("users");
+                let request = storeObject.delete(id);
+
+                request.onsuccess = () => {
+                    console.log(`User with ID ${id} deleted successfully!`);
+                };
+
+                request.onerror = (e) => {
+                    console.error("Error deleting user:", e.target.error);
+                };
+            }
+
+        }
+
+        function editUser(id) {
+
+            let change = false;
+            document.getElementById('updateUser').style.display = 'block'
+            document.getElementById('submitUser').style.display = 'none'
+
+            if (!db) {
+                console.log("DB not initialized yet");
+                return
+            }
+            let transaction = db.transaction("users", "readwrite");
+            let storeObject = transaction.objectStore("users");
+            let request = storeObject.get(id);
+
+            request.onsuccess = (e) => {
+                let user = e.target.result
+                console.log(user);
+
+
+                let name = document.getElementById("name").value = user.name;
+                let email = document.getElementById("email").value = user.email;
+                let password = document.getElementById("password").value = user.password;
+                let phone = document.getElementById("phone").value = user.phone;
+                let age = document.getElementById("age").value = user.age;
+                let gender = document.getElementById("gender").value = user.gender;
+                let hobbies = document.getElementById("hobbies").value = user.hobbies;
+
+
+            };
+
+            request.onerror = (e) => {
+                console.error("Error editing user:", e.target.error);
+            };
+
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>

@@ -2,24 +2,586 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Basic Toast</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management System</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center h-screen">
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold text-center mb-8">User Management System</h1>
 
-    <!-- Button -->
-    <button onclick="showToast()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-        Show Toast
-    </button>
+        <!-- Registration Form -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Register New User</h2>
+            <form id="userForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Form fields will be here -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="name">Name</label>
+                    <input type="text" id="name" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
 
-    <!-- Toast Box -->
-    <div id="toast" class="hidden fixed bottom-5 right-5 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg">
-        This is a toast message!
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="email">Email</label>
+                    <input type="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="password">Password</label>
+                    <input type="password" id="password" class="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="phone">Phone</label>
+                    <input type="tel" id="phone" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="age">Age</label>
+                    <input type="number" id="age" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Gender</label>
+                    <div class="flex items-center space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="gender" value="male" class="form-radio">
+                            <span class="ml-2">Male</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="gender" value="female" class="form-radio">
+                            <span class="ml-2">Female</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="gender" value="other" class="form-radio">
+                            <span class="ml-2">Other</span>
+                        </label>
+                    </div>
+                    <div class="genderError mt-2"></div>
+                </div>
+
+                <div class="mb-4 md:col-span-2">
+                    <label class="block text-gray-700 mb-2">Hobbies</label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" value="reading" class="form-checkbox">
+                            <span class="ml-2">Reading</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" value="sports" class="form-checkbox">
+                            <span class="ml-2">Sports</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" value="music" class="form-checkbox">
+                            <span class="ml-2">Music</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" value="travel" class="form-checkbox">
+                            <span class="ml-2">Travel</span>
+                        </label>
+                    </div>
+                    <div id="hobbies" class="mt-2"></div>
+                </div>
+
+                <div class="md:col-span-2 showAllFieldError mb-4"></div>
+
+                <div class="md:col-span-2">
+                    <button type="submit"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Register</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Users Table -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4">Registered Users</h2>
+            <table class="min-w-full">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-left">Name</th>
+                        <th class="py-3 px-6 text-left">Email</th>
+                        <th class="py-3 px-6 text-left">Phone</th>
+                        <th class="py-3 px-6 text-left">Age</th>
+                        <th class="py-3 px-6 text-left">Gender</th>
+                        <th class="py-3 px-6 text-left">Hobbies</th>
+                        <th class="py-3 px-6 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody" class="text-gray-600 text-sm font-light">
+                    <!-- Users will be populated here -->
+                </tbody>
+            </table>
+        </div>
     </div>
-    <script src="./toaster.js"></script>
+
+    <!-- Update Modal -->
+    <div id="updateModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+            <h2 class="text-2xl font-semibold mb-4">Update User</h2>
+            <input type="hidden" id="updateIndex">
+
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="updateName">Name</label>
+                <input type="text" id="updateName" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="updateEmail">Email</label>
+                <input type="email" id="updateEmail" class="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="updatePhone">Phone</label>
+                <input type="tel" id="updatePhone" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="updateAge">Age</label>
+                <input type="number" id="updateAge" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">Gender</label>
+                <div class="flex items-center space-x-4">
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="updateGender" value="male" class="form-radio">
+                        <span class="ml-2">Male</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="updateGender" value="female" class="form-radio">
+                        <span class="ml-2">Female</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="updateGender" value="other" class="form-radio">
+                        <span class="ml-2">Other</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">Hobbies</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" value="reading" class="updateHobby form-checkbox">
+                        <span class="ml-2">Reading</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" value="sports" class="updateHobby form-checkbox">
+                        <span class="ml-2">Sports</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" value="music" class="updateHobby form-checkbox">
+                        <span class="ml-2">Music</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" value="travel" class="updateHobby form-checkbox">
+                        <span class="ml-2">Travel</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-2">
+                <button id="cancelUpdate"
+                    class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition">Cancel</button>
+                <button id="submitUpdate"
+                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Update</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== MODEL ====================
+        const UserModel = {
+            getUsers: function () {
+                return JSON.parse(localStorage.getItem("users")) || [];
+            },
+
+            saveUsers: function (users) {
+                localStorage.setItem("users", JSON.stringify(users));
+            },
+
+            addUser: function (user) {
+                const users = this.getUsers();
+                users.push(user);
+                this.saveUsers(users);
+                return users;
+            },
+
+            updateUser: function (index, user) {
+                const users = this.getUsers();
+                if (users[index]) {
+                    // Keep the original password
+                    user[2] = users[index][2];
+                    users[index] = user;
+                    this.saveUsers(users);
+                }
+                return users;
+            },
+
+            deleteUser: function (index) {
+                const users = this.getUsers();
+                users.splice(index, 1);
+                this.saveUsers(users);
+                return users;
+            },
+
+            validatePassword: function (password) {
+                const minLength = /.{8,}/;
+                const upperCase = /[A-Z]/;
+                const lowerCase = /[a-z]/;
+                const number = /[0-9]/;
+                const specialChar = /[!@#$%^&*]/;
+
+                if (!minLength.test(password)) {
+                    return "Password must be at least 8 characters long.";
+                }
+                if (!upperCase.test(password)) {
+                    return "Password must contain at least one uppercase letter.";
+                }
+                if (!lowerCase.test(password)) {
+                    return "Password must contain at least one lowercase letter.";
+                }
+                if (!number.test(password)) {
+                    return "Password must contain at least one number.";
+                }
+                if (!specialChar.test(password)) {
+                    return "Password must contain at least one special character (!@#$%^&*).";
+                }
+                return true;
+            },
+
+            checkEmailExists: function (email) {
+                const users = this.getUsers();
+                for (let i = 0; i < users.length; i++) {
+                    if (users[i][1] === email) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+
+            validateUser: function (userData, isUpdate = false, index = null) {
+                const errors = [];
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const phoneRegex = /^[0-9]{10}$/;
+
+                if (!userData.name) errors.push({ field: "name", message: "Please enter your name" });
+                if (!userData.email || !emailRegex.test(userData.email)) {
+                    errors.push({ field: "email", message: "Please enter a valid email address." });
+                }
+                if (!isUpdate) {
+                    const passwordValidation = this.validatePassword(userData.password);
+                    if (passwordValidation !== true) {
+                        errors.push({ field: "password", message: passwordValidation });
+                    }
+                    if (userData.password !== userData.confirmPassword) {
+                        errors.push({ field: "confirmPassword", message: "Passwords do not match." });
+                    }
+                }
+                if (!userData.phone || !phoneRegex.test(userData.phone)) {
+                    errors.push({ field: "phone", message: "Phone number must be 10 digits." });
+                }
+                if (!userData.gender) {
+                    errors.push({ field: "gender", message: "Please select a gender." });
+                }
+                if (!userData.age || userData.age <= 0 || userData.age > 100) {
+                    errors.push({ field: "age", message: "Age should be between 1 and 100." });
+                }
+                if (!userData.hobbies || userData.hobbies.length < 2) {
+                    errors.push({ field: "hobbies", message: "Please select at least two hobbies." });
+                }
+
+                // Check for duplicate email (excluding current user in update)
+                if (!isUpdate && this.checkEmailExists(userData.email)) {
+                    errors.push({ field: "email", message: "Email already exists." });
+                } else if (isUpdate && index !== null) {
+                    const users = this.getUsers();
+                    // Check if email exists and doesn't belong to current user
+                    for (let i = 0; i < users.length; i++) {
+                        if (users[i][1] === userData.email && i !== parseInt(index)) {
+                            errors.push({ field: "email", message: "Email already exists." });
+                            break;
+                        }
+                    }
+                }
+
+                return errors;
+            }
+        };
+
+        // ==================== VIEW ====================
+        const UserView = {
+            renderUsers: function (users) {
+                const tbody = document.getElementById("userTableBody");
+                if (!tbody) return;
+
+                tbody.innerHTML = "";
+                users.forEach((user, index) => {
+                    const [name, email, , phone, age, gender, hobbies] = user;
+
+                    const row = document.createElement("tr");
+                    row.className = "table-row border-b border-gray-200 hover:bg-gray-50";
+
+                    row.innerHTML = `
+                        <td class="p-3">${name}</td>
+                        <td class="p-3">${email}</td>
+                        <td class="p-3">${phone}</td>
+                        <td class="p-3">${age}</td>
+                        <td class="p-3">${gender || "-"}</td>
+                        <td class="p-3">${hobbies.join(", ")}</td>
+                        <td class="p-3">
+                            <button class="text-blue-500 hover:text-blue-700 mr-2" title="Edit user" onclick="UserController.openUpdateModal(${index})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="text-red-500 hover:text-red-700" title="Delete user" onclick="UserController.deleteUser(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+
+                    tbody.appendChild(row);
+                });
+            },
+
+            showError: function (inputElement, message) {
+                // Remove any existing error
+                this.clearError(inputElement);
+
+                let error = document.createElement("p");
+                error.className = "error-msg text-red-500 text-sm mt-1";
+                error.innerText = message;
+
+                if (inputElement.tagName === "DIV") {
+                    inputElement.appendChild(error);
+                } else {
+                    inputElement.parentElement.appendChild(error);
+                }
+            },
+
+            clearError: function (inputElement) {
+                const errorElement = inputElement.tagName === "DIV"
+                    ? inputElement.querySelector(".error-msg")
+                    : inputElement.parentElement.querySelector(".error-msg");
+
+                if (errorElement) {
+                    errorElement.remove();
+                }
+            },
+
+            clearAllErrors: function () {
+                document.querySelectorAll(".error-msg").forEach(el => el.remove());
+            },
+
+            showToast: function (notification, isSuccess = true) {
+                const toaster = createToaster({
+                    positionX: "right",
+                    positionY: "top",
+                    theme: "dark",
+                    duration: 3,
+                });
+
+                toaster(notification, isSuccess);
+            },
+
+            openUpdateModal: function (user, index) {
+                document.getElementById("updateIndex").value = index;
+                document.getElementById("updateName").value = user[0] || "";
+                document.getElementById("updateEmail").value = user[1] || "";
+                document.getElementById("updatePhone").value = user[3] || "";
+                document.getElementById("updateAge").value = user[4] || "";
+
+                // Set gender
+                document.querySelectorAll('input[name="updateGender"]').forEach((radio) => {
+                    radio.checked = radio.value === user[5];
+                });
+
+                // Set hobbies
+                document.querySelectorAll(".updateHobby").forEach((checkbox) => {
+                    checkbox.checked = user[6].includes(checkbox.value);
+                });
+
+                document.getElementById("updateModal").classList.remove("hidden");
+                document.getElementById("updateModal").classList.add("flex");
+            },
+
+            closeUpdateModal: function () {
+                document.getElementById("updateModal").classList.add("hidden");
+                document.getElementById("updateModal").classList.remove("flex");
+            },
+
+            getFormData: function (formId) {
+                const form = document.getElementById(formId);
+                return {
+                    name: form.querySelector("input[type='text']").value.trim(),
+                    email: form.querySelector("input[type='email']").value.trim(),
+                    password: form.querySelector("input[type='password']").value,
+                    confirmPassword: form.querySelector("#confirm-password").value,
+                    phone: form.querySelector("input[type='tel']").value.trim(),
+                    age: form.querySelector("input[type='number']").value,
+                    gender: form.querySelector("input[name='gender']:checked")?.value || null,
+                    hobbies: Array.from(form.querySelectorAll("input[type='checkbox']:checked")).map(cb => cb.value)
+                };
+            },
+
+            getUpdateFormData: function () {
+                return {
+                    name: document.getElementById("updateName").value.trim(),
+                    email: document.getElementById("updateEmail").value.trim(),
+                    phone: document.getElementById("updatePhone").value.trim(),
+                    age: document.getElementById("updateAge").value,
+                    gender: document.querySelector('input[name="updateGender"]:checked')?.value || null,
+                    hobbies: Array.from(document.querySelectorAll(".updateHobby:checked")).map(cb => cb.value)
+                };
+            }
+        };
+
+        // ==================== CONTROLLER ====================
+        const UserController = {
+            init: function () {
+                this.setupEventListeners();
+                this.loadUsers();
+            },
+
+            setupEventListeners: function () {
+                // Registration form submission
+                const userForm = document.getElementById("userForm");
+                if (userForm) {
+                    userForm.addEventListener("submit", (e) => this.handleFormSubmit(e));
+                }
+
+                // Update form submission
+                const submitUpdate = document.getElementById("submitUpdate");
+                if (submitUpdate) {
+                    submitUpdate.addEventListener("click", () => this.handleUpdateSubmit());
+                }
+
+                // Cancel update
+                const cancelUpdate = document.getElementById("cancelUpdate");
+                if (cancelUpdate) {
+                    cancelUpdate.addEventListener("click", () => UserView.closeUpdateModal());
+                }
+            },
+
+            loadUsers: function () {
+                const users = UserModel.getUsers();
+                UserView.renderUsers(users);
+            },
+
+            handleFormSubmit: function (event) {
+                event.preventDefault();
+                UserView.clearAllErrors();
+
+                const formData = UserView.getFormData("userForm");
+                const errors = UserModel.validateUser(formData);
+
+                if (errors.length > 0) {
+                    errors.forEach(error => {
+                        const fieldElement = document.getElementById(error.field) ||
+                            document.querySelector(`.${error.field}Error`) ||
+                            document.querySelector(".showAllFieldError");
+                        UserView.showError(fieldElement, error.message);
+                    });
+                    return;
+                }
+
+                // Format user data for storage
+                const userData = [
+                    formData.name,
+                    formData.email,
+                    formData.password,
+                    formData.phone,
+                    formData.age,
+                    formData.gender,
+                    formData.hobbies
+                ];
+
+                UserModel.addUser(userData);
+                UserView.showToast("User registered successfully!", true);
+                this.loadUsers();
+
+                // Reset form
+                document.getElementById("userForm").reset();
+            },
+
+            handleUpdateSubmit: function () {
+                UserView.clearAllErrors();
+
+                const index = document.getElementById("updateIndex").value;
+                const formData = UserView.getUpdateFormData();
+                const errors = UserModel.validateUser(formData, true, index);
+
+                if (errors.length > 0) {
+                    errors.forEach(error => {
+                        const fieldElement = document.getElementById(`update${error.field.charAt(0).toUpperCase() + error.field.slice(1)}`) ||
+                            document.querySelector(`.${error.field}Error`);
+                        UserView.showError(fieldElement, error.message);
+                    });
+                    return;
+                }
+
+                // Format user data for storage
+                const userData = [
+                    formData.name,
+                    formData.email,
+                    "", // Password will be preserved from original data
+                    formData.phone,
+                    formData.age,
+                    formData.gender,
+                    formData.hobbies
+                ];
+
+                UserModel.updateUser(index, userData);
+                UserView.showToast("User updated successfully!", true);
+                this.loadUsers();
+                UserView.closeUpdateModal();
+            },
+
+            deleteUser: function (index) {
+                if (confirm("Are you sure you want to delete this user?")) {
+                    UserModel.deleteUser(index);
+                    UserView.showToast("User deleted successfully!", true);
+                    this.loadUsers();
+                }
+            },
+
+            openUpdateModal: function (index) {
+                const users = UserModel.getUsers();
+                UserView.openUpdateModal(users[index], index);
+            }
+        };
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function createToaster(config) {
+            return function (notification, status) {
+                let div = document.createElement("div");
+                div.className = `fixed top-5 right-5 ${status == true ? "bg-green-800" : "bg-red-800"
+                    } text-white px-4 py-2 rounded-lg shadow-lg ${config.positionX === "right" ? "right-10" : "left-10"
+                    } ${config.positionY === "top" ? "top-10" : "bottom-10"}`;
+
+                div.textContent = notification;
+                document.body.appendChild(div);
+
+                setTimeout(() => {
+                    document.body.removeChild(div);
+                }, config.duration * 1000);
+            };
+        }
+
+        // Initialize the application
+        document.addEventListener("DOMContentLoaded", function () {
+            UserController.init();
+        });
+    </script>
 </body>
 
 </html>
