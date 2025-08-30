@@ -43,11 +43,8 @@
         <tbody></tbody>
     </table>
     <script>
-        // Open DB
         let db;
         let openRequest = indexedDB.open("myDB", 1);
-
-
 
         openRequest.onupgradeneeded = (e) => {
             let db = e.target.result;
@@ -63,7 +60,7 @@
             console.error("DB error:", e.target.error);
         };
         document.getElementById("userForm").addEventListener("submit", (e) => {
-            e.preventDefault(); // prevent reload
+            e.preventDefault();
             let form = document.getElementById("userForm")
             let db = openRequest.result;
 
@@ -171,8 +168,6 @@
             request.onsuccess = (e) => {
                 let user = e.target.result
                 console.log(user);
-
-
                 let name = document.getElementById("name").value = user.name;
                 let email = document.getElementById("email").value = user.email;
                 let password = document.getElementById("password").value = user.password;
@@ -180,8 +175,6 @@
                 let age = document.getElementById("age").value = user.age;
                 let gender = document.getElementById("gender").value = user.gender;
                 let hobbies = document.getElementById("hobbies").value = user.hobbies;
-
-
             };
 
             request.onerror = (e) => {
@@ -189,9 +182,6 @@
             };
 
         }
-
-
-
     </script>
 
 </body>

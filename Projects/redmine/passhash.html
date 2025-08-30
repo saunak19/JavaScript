@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Hashing Example</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7f9;
+            color: #333;
+        }
+
+        .container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            word-break: break-all;
+            font-family: monospace;
+        }
+
+        .note {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Password Hashing Example</h1>
+
+        <div class="note">
+            <p><strong>Note:</strong> The hash you provided appears to be a WordPress-style hash using the phpass
+                framework. This example demonstrates password hashing with the Web Crypto API, which uses a different
+                algorithm and won't produce the same hash format.</p>
+        </div>
+
+        <label for="password">Enter a password to hash:</label>
+        <input type="password" id="password" placeholder="Enter password">
+
+        <button onclick="hashPassword()">Hash Password</button>
+
+        <div class="output" id="output">
+            Hash will appear here...
+        </div>
+
+        <div class="note">
+            <p><strong>Security reminder:</strong> In a real application, password hashing should always be done on the
+                server side with a proper cryptographic library designed for password hashing (like bcrypt, Argon2, or
+                PBKDF2 with sufficient iterations).</p>
+        </div>
+    </div>
+
+    <script>
+        async function hashPassword() {
+            const password = document.getElementById('password').value;
+            if (!password) {
+                document.getElementById('output').textContent = 'Please enter a password';
+                return;
+            }
+
+            // Encode the password as a Uint8Array
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+
+            try {
+                // Generate a hash using SHA-256 (note: for real passwords, use a slower algorithm)
+                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+
+                // Convert the hash to a hexadecimal string
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+                document.getElementById('output').textContent = `SHA-256 Hash: ${hashHex}`;
+            } catch (error) {
+                document.getElementById('output').textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+
+</html>
